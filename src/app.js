@@ -9,17 +9,15 @@ const logger = require("pino")({
 		option: {
 			colorize: true
 		}
-	},
+	}
 });
 const app = express();
 
 mongoose.set("strictQuery", false);
-mongoose
-	.connect(config.mongo.url, { retryWrites: true, w: "majority" })
-	.then(() => {
-		logger.info("Connected to MongoDB.");
-		startServer();
-	});
+mongoose.connect(config.mongo.url, { retryWrites: true, w: "majority" }).then(() => {
+	logger.info("Connected to MongoDB.");
+	startServer();
+});
 
 const startServer = () => {
 	app.use(express.urlencoded({ extended: true }));
@@ -32,15 +30,14 @@ const startServer = () => {
 		);
 		res.on("finish", () => {
 			logger.info(
-				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`);
+				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`
+			);
 		});
 		next();
 	});
 
 	// Healthcheck Endpoint
-	app.get("/", (_req, res, _next) =>
-		res.status(200).json({ message: "Healthcheck Achieved." })
-	);
+	app.get("/", (_req, res, _next) => res.status(200).json({ message: "Healthcheck Achieved." }));
 
 	// Handle Non-existing Routes
 	app.use((_req, res, _next) => {
@@ -52,5 +49,4 @@ const startServer = () => {
 	http.createServer(app).listen(config.server.port, () =>
 		logger.info(`Server is running on port ${config.server.port}.`)
 	);
-}
-
+};
