@@ -3,6 +3,8 @@ const http = require("http");
 const mongoose = require("mongoose");
 const config = require("./config/config");
 
+const authRoutes = require("./routes/auth.route");
+
 const logger = require("pino")({
 	transport: {
 		target: "pino-pretty",
@@ -35,6 +37,8 @@ const startServer = () => {
 		});
 		next();
 	});
+
+	app.use("/auth", authRoutes);
 
 	// Healthcheck Endpoint
 	app.get("/", (_req, res, _next) => res.status(200).json({ message: "Healthcheck Achieved." }));
