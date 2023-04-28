@@ -3,7 +3,14 @@ const http = require("http");
 const mongoose = require("mongoose");
 const config = require("./config/config");
 
-const logger = require("pino")();
+const logger = require("pino")({
+	transport: {
+		target: "pino-pretty",
+		option: {
+			colorize: true
+		}
+	},
+});
 const app = express();
 
 mongoose.set("strictQuery", false);
@@ -25,7 +32,7 @@ const startServer = () => {
 		);
 		res.on("finish", () => {
 			logger.info(
-				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`)
+				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`);
 		});
 		next();
 	});
