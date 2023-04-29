@@ -13,12 +13,15 @@ const userSchema = new mongoose.Schema({
 
 // Hash the password before saving the user to the database
 userSchema.pre("save", async function (next) {
-	const user = this;
-	if (user.isModified("password")) {
-		const salt = await bcrypt.genSalt(10);
-		user.password = await bcrypt.hash(user.password, salt);
+	try {
+		const user = this;
+		if (user.isModified("password")) {
+			user.password = await bcrypt.hash(user.password, config.hash.salt);
+		}
+		next();
+	} catch (error) {
+		next(error);
 	}
-	next();
 });
 
 // Create a JWT token for the user
@@ -31,7 +34,6 @@ userSchema.methods.generateAuthToken = function () {
 	);
 	const refreshToken = jwt.sign({ _id: user._id }, config.jwt.refresh, { expiresIn: "7d" });
 	user.refreshTokens.push(refreshToken);
-	user.save();
 	return { accessToken: token, refreshToken: refreshToken };
 };
 

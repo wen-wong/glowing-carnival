@@ -16,6 +16,8 @@ const JWT_REFRESH_SECRET_KEY =
 	process.env.JWT_REFRESH_SECRET_KEY ||
 	"ec2bfb56c10db939f2feab4fd088d417c7a598cd7d0561fb403f9af1e901de91";
 
+const HASH_SALT = process.env.HASH_SALT || 10;
+
 const config = {
 	mongo: {
 		url: MONGO_URL
@@ -26,6 +28,9 @@ const config = {
 	jwt: {
 		secret: JWT_SECRET_KEY,
 		refresh: JWT_REFRESH_SECRET_KEY
+	},
+	hash: {
+		salt: HASH_SALT
 	}
 };
 

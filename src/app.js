@@ -3,6 +3,9 @@ const http = require("http");
 const mongoose = require("mongoose");
 const config = require("./config/config");
 
+const passport = require("passport");
+const passportConfig = require("./middlewares/passport.middleware");
+
 const authRoutes = require("./routes/auth.route");
 
 const logger = require("pino")({
@@ -22,6 +25,9 @@ mongoose.connect(config.mongo.url, { retryWrites: true, w: "majority" }).then(()
 });
 
 const startServer = () => {
+	app.use(passport.initialize());
+	passportConfig(passport);
+
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json());
 
@@ -32,7 +38,7 @@ const startServer = () => {
 		);
 		res.on("finish", () => {
 			logger.info(
-				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`
+				`Incoming -> Method [${req.method}] - Uri: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${res.statusCode}]`
 			);
 		});
 		next();
