@@ -15,11 +15,11 @@ const logger = require("pino")({
 const register = async (req, res, next) => {
 	try {
 		const { name, email, password } = req.body;
-		const hashedPassword = await bcrypt.hash(password, 10);
-		const user = new User({ name, email, password: hashedPassword });
+		const user = new User({ name, email, password });
+
+		const token = user.generateAuthToken();
 
 		await user.save();
-		const token = user.generateAuthToken();
 
 		res.status(201).json({ user, token });
 	} catch (error) {
@@ -49,7 +49,7 @@ const login = async (req, res, next) => {
 	}
 };
 
-refreshToken = async (req, res) => {
+const refreshToken = async (req, res) => {
 	try {
 		const session = await startSession();
 		session.startTransaction();

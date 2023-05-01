@@ -47,10 +47,10 @@ const startServer = () => {
 	app.use("/auth", authRoutes);
 
 	// Healthcheck Endpoint
-	app.get("/", (_req, res, _next) => res.status(200).json({ message: "Healthcheck Achieved." }));
+	app.get("/", (_req, res) => res.status(200).json({ message: "Healthcheck Achieved." }));
 
 	// Handle Non-existing Routes
-	app.use((_req, res, _next) => {
+	app.use((_req, res) => {
 		const error = new Error("not found");
 		logger.error(error);
 		return res.status(404).json({ message: error.message });

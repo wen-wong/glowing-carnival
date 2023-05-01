@@ -4,9 +4,36 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 
 const userSchema = new mongoose.Schema({
-	email: { type: String, required: true, unique: true },
+	email: {
+		type: String,
+		required: true,
+		unique: true,
+		lowercase: true,
+		match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+		validate: {
+			validator: function (value) {
+				return mongoose
+					.model("User", userSchema)
+					.findOne({ email: value })
+					.then((user) => !user);
+			}
+		}
+	},
 	password: { type: String, required: true },
 	name: { type: String },
+	phone: {
+		type: String,
+		unique: true,
+		match: /\d{3}-\d{3}-\d{4}/,
+		validate: {
+			validator: function (value) {
+				return mongoose
+					.model("User", userSchema)
+					.findOne({ phone: value })
+					.then((user) => !user);
+			}
+		}
+	},
 	role: { type: String, enum: ["user", "moderator", "admin"], default: "user" },
 	refreshTokens: [{ type: String }]
 });
