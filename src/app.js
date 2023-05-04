@@ -49,6 +49,10 @@ const startServer = () => {
 	// Healthcheck Endpoint
 	app.get("/", (_req, res) => res.status(200).json({ message: "Healthcheck Achieved." }));
 
+	app.get("/poo", (req, res, next) => {
+		return res.status(200).json({ message: "pee" });
+	});
+
 	// Handle Non-existing Routes
 	app.use((_req, res) => {
 		const error = new Error("not found");
