@@ -54,6 +54,7 @@ const refreshToken = async (req, res) => {
 		const session = await startSession();
 		session.startTransaction();
 		const { refreshToken } = req.body;
+		console.log(refreshToken)
 		const decoded = jwt.verify(refreshToken, config.jwt.refresh);
 		const user = await User.findById(decoded._id);
 

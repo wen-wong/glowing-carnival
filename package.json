@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon ./src/app.js",
     "test": "jest",
+    "coverage": "jest --coverage",
     "lint": "eslint \"**/*.js\" --quiet --fix",
     "prettier": "prettier --write src/"
   },
