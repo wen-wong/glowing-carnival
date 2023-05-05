@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const config = require("../config/config");
+const next = require("../../src/for_next/services");
 const { startSession } = require("mongoose");
 const logger = require("pino")({
 	transport: {
@@ -23,7 +24,8 @@ const register = async (req, res, next) => {
 
 		res.status(201).json({ user, token });
 	} catch (error) {
-		next(error);
+		//next(error);
+		console.log("error");
 	}
 };
 
