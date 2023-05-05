@@ -15,9 +15,9 @@ const logger = require("pino")({
 
 const register = async (req, res, next) => {
 	try {
+		console.log(req.body);
 		const { name, email, password } = req.body;
 		const user = new User({ name, email, password });
-
 		const token = user.generateAuthToken();
 
 		await user.save();
