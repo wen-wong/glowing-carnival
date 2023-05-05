@@ -136,3 +136,10 @@ describe('register', () => {
 //     expect(hello).toBe(true);
 //
 // })
+
+/* REFRESH TOKEN
+* req = refreshToken
+* test case for !user -> can check with return res status message
+* test case for if session.commitTransaction()
+* test case for error
+* */
