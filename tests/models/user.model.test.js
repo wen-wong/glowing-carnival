@@ -1,4 +1,4 @@
-const { User } = require("../../src/models/user.model");
+const User = require("../../src/models/user.model");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
@@ -16,15 +16,15 @@ afterAll(async () => {
 	await mongoServer.stop();
 });
 
-// describe("User Schema", () => {
-// 	test("should insert a User document correctly", async() => {
-// 		const user = new User({
-// 			email: "elmo@mail.ca",
-// 			password: "elmo",
-// 			name: "Elmo",
-// 			phone: "123-123-1234",
-// 			role: "user"
-// 		});
-// 		await expect(user.save()).resolves.toBeDefined();
-// 	});
-// });
+describe("User Schema", () => {
+	test("should insert a User document correctly", async() => {
+		const user = new User({
+			email: "elmo@mail.ca",
+			password: "elmo",
+			name: "Elmo",
+			phone: "123-123-1234",
+			role: "user"
+		});
+		await expect(user.save()).resolves.toBeDefined();
+	});
+});
