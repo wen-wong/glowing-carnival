@@ -1,4 +1,4 @@
-const { User } = require("../../src/models/user.model");
+const User = require("../../src/models/user.model");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
@@ -6,11 +6,13 @@ let mongoServer;
 
 beforeAll(async () => {
 	mongoServer = new MongoMemoryServer();
+	await mongoServer.start();
 	const mongoUri = mongoServer.getUri();
-	await mongoose.connect(mongoUri, {
-		useNewUriParser: true,
-		userUnifiedTopology: true,
-	});
+	await mongoose.connect(mongoUri);
+	// , {
+	//     useNewUriParser: true,
+	//     userUnifiedTopology: true,
+	// });
 });
 
 afterAll(async () => {
@@ -19,7 +21,7 @@ afterAll(async () => {
 });
 
 describe("User Schema", () => {
-	test("should insert a User document correctly", async() => {
+	test("should insert a User document correctly", async () => {
 		const user = new User({
 			email: "elmo@mail.ca",
 			password: "elmo",
@@ -29,4 +31,9 @@ describe("User Schema", () => {
 		});
 		await expect(user.save()).resolves.toBeDefined();
 	});
+});
+
+test("lol", () => {
+	let hello = true;
+	expect(hello).toBe(true);
 });
