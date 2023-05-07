@@ -2,7 +2,7 @@ const User = require("../../src/models/user.model");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const bcrypt = require("bcryptjs");
-const { register, login } = require("../../src/controllers/auth.controller");
+const { register, login, refreshToken } = require("../../src/controllers/auth.controller");
 let mongoServer;
 
 beforeAll(async () => {
