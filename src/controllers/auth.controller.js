@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const config = require("../config/config");
+const next = require("../../src/for_next/services");
 const { startSession } = require("mongoose");
 const logger = require("pino")({
 	transport: {
@@ -14,9 +15,9 @@ const logger = require("pino")({
 
 const register = async (req, res, next) => {
 	try {
+		//console.log(req.body);
 		const { name, email, password } = req.body;
 		const user = new User({ name, email, password });
-
 		const token = user.generateAuthToken();
 
 		await user.save();
@@ -24,6 +25,7 @@ const register = async (req, res, next) => {
 		res.status(201).json({ user, token });
 	} catch (error) {
 		next(error);
+		//console.log("error");
 	}
 };
 
@@ -54,6 +56,7 @@ const refreshToken = async (req, res) => {
 		const session = await startSession();
 		session.startTransaction();
 		const { refreshToken } = req.body;
+		//console.log(refreshToken);
 		const decoded = jwt.verify(refreshToken, config.jwt.refresh);
 		const user = await User.findById(decoded._id);
 
@@ -63,6 +66,7 @@ const refreshToken = async (req, res) => {
 		}
 
 		const updatedAccessToken = user.generateAuthToken();
+		//console.log(updatedAccessToken);
 		const updatedRefreshToken = jwt.sign({ _id: user._id }, config.jwt.refresh, {
 			expiresIn: "7d"
 		});
@@ -75,6 +79,7 @@ const refreshToken = async (req, res) => {
 		res.send({ accessToken: updatedAccessToken, refreshToken: updatedRefreshToken });
 	} catch (error) {
 		logger.error(error);
+		//console.log("token error");
 		res.status(500).send({ message: "Internal server error" });
 	}
 };
