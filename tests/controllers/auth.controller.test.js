@@ -84,7 +84,6 @@ describe("login function", () => {
 		jest.spyOn(bcrypt, "compare");
 		jest.spyOn(f_user, "generateAuthToken");
 		await login(res, req, next);
-		//expect(User.findOne).toHaveBeenCalledWith({ email: "amen@bob.com" });
 		expect(bcrypt.compare).not.toHaveBeenCalled();
 		expect(res.status).not.toHaveBeenCalled();
 		expect(res.json).not.toHaveBeenCalled();
