@@ -32,8 +32,3 @@ describe("User Schema", () => {
 		await expect(user.save()).resolves.toBeDefined();
 	});
 });
-
-test("lol", () => {
-	let hello = true;
-	expect(hello).toBe(true);
-});
