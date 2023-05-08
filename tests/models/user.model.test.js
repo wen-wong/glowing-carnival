@@ -17,7 +17,7 @@ afterAll(async () => {
 });
 
 describe("User Schema", () => {
-	test("should insert a User document correctly", async() => {
+	test("should insert a User document correctly", async () => {
 		const user = new User({
 			email: "elmo@mail.ca",
 			password: "elmo",

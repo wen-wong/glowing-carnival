@@ -8,13 +8,13 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true,
-		lowercase: true,
+		lowercase: true
 	},
 	password: { type: String, required: true },
 	name: { type: String },
 	phone: {
 		type: String,
-		unique: true,
+		unique: true
 	},
 	role: { type: String, enum: ["user", "moderator", "admin"], default: "user" },
 	refreshTokens: [{ type: String }]
