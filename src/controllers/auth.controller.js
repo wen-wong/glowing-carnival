@@ -15,7 +15,7 @@ const logger = require("pino")({
 
 const register = async (req, res, next) => {
 	try {
-		console.log(req.body);
+		//console.log(req.body);
 		const { name, email, password } = req.body;
 		const user = new User({ name, email, password });
 		const token = user.generateAuthToken();
@@ -56,7 +56,7 @@ const refreshToken = async (req, res) => {
 		const session = await startSession();
 		session.startTransaction();
 		const { refreshToken } = req.body;
-		console.log(refreshToken);
+		//console.log(refreshToken);
 		const decoded = jwt.verify(refreshToken, config.jwt.refresh);
 		const user = await User.findById(decoded._id);
 
