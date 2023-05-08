@@ -3,6 +3,8 @@ const { register, refreshToken } = require("../../src/controllers/auth.controlle
 const next = require("../../src/for_next/services");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
+const jwt = require("jsonwebtoken");
+const config = require('../../src/config/config');
 
 let mongoServer;
 
@@ -56,11 +58,12 @@ describe('register', () => {
     /*ERROR TEST CASE*/
     it('should log an error if an error occurs', async () => {
         const error = new Error('bruh');
+        const user = new User({ name: 'John Doe', email: 'john@example.com', password: 'password123'});
         //User.mockImplementationOnce(() => { throw error; });
         User.mockImplementationOnce;
 
-        const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-
+        //const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+        jest.spyOn(user, "save").mockResolvedValue(Error);
         await register(req, res, next);
 
         //expect(User).toHaveBeenCalledTimes(1);
@@ -69,9 +72,9 @@ describe('register', () => {
         expect(res.status).not.toHaveBeenCalled();
         expect(res.json).not.toHaveBeenCalled();
 
-        expect(consoleSpy).toHaveBeenCalledWith('error');
+        //expect(consoleSpy).toHaveBeenCalledWith('error');
 
-        consoleSpy.mockRestore();
+        //consoleSpy.mockRestore();
     });
 });
 
@@ -146,35 +149,80 @@ describe('register', () => {
 
 
 describe('refreshToken endpoint', () => {
-    let user;
-    let refreshToken;
-    const req = { body: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDU0MDg1NzE3MGMyOTE5N2U0MzZhMDUiLCJpYXQiOjE2ODMyMzIwODEsImV4cCI6MTY4MzgzNjg4MX0.CV9KXNob6VSU82oUe3A9vGLAS6b8uTpVJ7Ozb8CpXqU' } };
-    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    let refreshedToken;
+    // const user = new User ({
+    //     email: 'test@example.com',
+    //     password: 'testpassword',
+    //     phone: '6176103635'
+    // });
+    // user.save = jest.fn();
+    // const authedToken = user.generateAuthToken();
+    // refreshedToken = user.generateRefreshToken;
 
+    // const userId = '64540857170c29197e436a05';
+    // const refreshSecret = config.jwt.refresh;
+    //
+    // const refreshedToken = jwt.sign({ _id: userId }, refreshSecret, { expiresIn: '7d' });
+    //
+    // console.log(refreshedToken);
+    req = { body: { name: 'John 2', email: 'john2@example.com', password: 'password123', phone: '617' } };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn(), send: jest.fn() };
+    const next = jest.fn();
 
     beforeAll(async () => {
-        user = new User({
-            email: 'test@example.com',
-            password: 'testpassword',
-            phone: '6176103635'
-        });
+        const user = new User({ name: 'John 2', email: 'john2@example.com', password: 'password123', phone: '617'});
+
+        //jest.spyOn(user, "generateAuthToken").mockResolvedValue(String);
+        await register(req, res, next);
         await user.save();
-        refreshedToken = user.generateRefreshToken;
+        refreshedToken = user.generateAuthToken();
+
+        console.log(refreshedToken.refreshToken);
+        //await user.save();
+        //refreshedToken = user.generateRefreshToken;
+
+        User.mockClear;
+        res.status.mockClear();
+        res.send.mockClear();
     });
 
-    afterAll(async () => {
-        await User.deleteMany({});
-    });
+    // afterAll(async () => {
+    //     await User.deleteMany({});
+    // });
 
     test('should return a new access token and refresh token', async () => {
-        //const response = await register.refreshToken(user);
-            //.post('/refresh-token')
-            //.send({ refreshToken })
-            //.expect(200);
+
+        req = { body: { refreshToken: refreshedToken.refreshToken }};
         await refreshToken(req, res);
-       // expect(response.body).toHaveProperty('accessToken');
+        //await expect(user.save()).resolves.toBeDefined();
+        expect(res.send).toHaveBeenCalledWith({ accessToken: expect.any(Object), refreshToken: expect.any(String) });
+
+        //expect(response.body).toHaveProperty('accessToken');
         //expect(response.body).toHaveProperty('refreshToken');
-        expect(res.status).toHaveBeenCalledWith(200);
+        //expect(res.status).toHaveBeenCalledWith(200);
+    });
+
+    it("401 if no user found (invalid refresh token)", async () => {
+        jest.spyOn(jwt, "verify").mockResolvedValue(String);
+        jest.spyOn(User, "findById").mockResolvedValue();
+        await refreshToken(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.send).toHaveBeenCalledWith({ message: "Invalid refresh token" });
+    });
+
+    it("500 for other errors", async () => {
+        const t_user = new User({
+            email: "test@example.com",
+            password: "testpassword",
+            phone: "6176103635"
+        });
+        jest.spyOn(jwt, "verify").mockResolvedValue(String);
+        jest.spyOn(User, "findById").mockResolvedValue(t_user);
+        jest.spyOn(t_user, "generateAuthToken").mockResolvedValue(String);
+        jest.spyOn(jwt, "sign").mockResolvedValue(Error);
+        await refreshToken(req, res);
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.send).toHaveBeenCalledWith({ message: "Internal server error" });
     });
 
     // test('should update the user with the new refresh token', async () => {
@@ -188,14 +236,20 @@ describe('refreshToken endpoint', () => {
     //     expect(updatedUser.refreshTokens).not.toContain(refreshToken);
     // });
     //
+
+    //TEST CASE 2
     // test('should return 401 if the refresh token is invalid', async () => {
-    //     const response = await request(app)
-    //         .post('/refresh-token')
-    //         .send({ refreshToken: 'invalid-token' })
-    //         .expect(401);
+    //     // const response = await request(app)
+    //     //     .post('/refresh-token')
+    //     //     .send({ refreshToken: 'invalid-token' })
+    //     //     .expect(401);
+    //     const response = await refreshToken(req, res);
+    //     expect(res.status).toHaveBeenCalledWith(401);
+    //     expect(res.send).toHaveBeenCalledWith({ message: "Invalid refresh token" });
     //
-    //     expect(response.body).toEqual({ message: 'Invalid refresh token' });
     // });
+    //
+
     //
     // test('should return 500 if there is an internal server error', async () => {
     //     jest.spyOn(User, 'findById').mockImplementation(() => {

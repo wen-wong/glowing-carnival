@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683320034175" clover="3.2.0">
-  <project timestamp="1683320034176" name="All files">
-    <metrics statements="84" coveredstatements="49" conditionals="20" coveredconditionals="10" methods="7" coveredmethods="3" elements="111" coveredelements="62" complexity="0" loc="84" ncloc="84" packages="4" files="4" classes="4"/>
+<coverage generated="1683568022387" clover="3.2.0">
+  <project timestamp="1683568022388" name="All files">
+    <metrics statements="84" coveredstatements="65" conditionals="20" coveredconditionals="12" methods="7" coveredmethods="5" elements="111" coveredelements="82" complexity="0" loc="84" ncloc="84" packages="4" files="4" classes="4"/>
     <package name="config">
       <metrics statements="11" coveredstatements="11" conditionals="12" coveredconditionals="9" methods="0" coveredmethods="0"/>
       <file name="config.js" path="C:\Users\Amy\OneDrive\Documents\GitHub\glowing-carnival\src\config\config.js">
@@ -20,9 +20,9 @@
       </file>
     </package>
     <package name="controllers">
-      <metrics statements="52" coveredstatements="19" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="1"/>
+      <metrics statements="52" coveredstatements="35" conditionals="6" coveredconditionals="1" methods="4" coveredmethods="3"/>
       <file name="auth.controller.js" path="C:\Users\Amy\OneDrive\Documents\GitHub\glowing-carnival\src\controllers\auth.controller.js">
-        <metrics statements="52" coveredstatements="19" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="1"/>
+        <metrics statements="52" coveredstatements="35" conditionals="6" coveredconditionals="1" methods="4" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -31,14 +31,14 @@
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="19" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
         <line num="32" count="1" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -54,27 +54,27 @@
         <line num="48" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="63" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="64" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="85" count="1" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
       </file>
     </package>
     <package name="for_next">
@@ -85,27 +85,27 @@
       </file>
     </package>
     <package name="models">
-      <metrics statements="20" coveredstatements="19" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
+      <metrics statements="20" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="user.model.js" path="C:\Users\Amy\OneDrive\Documents\GitHub\glowing-carnival\src\models\user.model.js">
-        <metrics statements="20" coveredstatements="19" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
+        <metrics statements="20" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
-        <line num="25" count="3" type="stmt"/>
-        <line num="26" count="3" type="stmt"/>
-        <line num="27" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="28" count="3" type="stmt"/>
-        <line num="30" count="3" type="stmt"/>
+        <line num="25" count="6" type="stmt"/>
+        <line num="26" count="6" type="stmt"/>
+        <line num="27" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="5" type="stmt"/>
+        <line num="30" count="6" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="37" count="2" type="stmt"/>
-        <line num="38" count="2" type="stmt"/>
-        <line num="39" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
-        <line num="45" count="2" type="stmt"/>
-        <line num="46" count="2" type="stmt"/>
+        <line num="38" count="5" type="stmt"/>
+        <line num="39" count="5" type="stmt"/>
+        <line num="44" count="5" type="stmt"/>
+        <line num="45" count="5" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
         <line num="49" count="2" type="stmt"/>
         <line num="51" count="2" type="stmt"/>
       </file>
