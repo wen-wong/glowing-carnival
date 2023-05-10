@@ -43,7 +43,7 @@ userSchema.methods.generateAuthToken = function () {
 	);
 	const refreshToken = jwt.sign({ _id: user._id }, config.jwt.refresh, { expiresIn: "7d" });
 	user.refreshTokens.push(refreshToken);
-	return { accessToken: token.toString(), refreshToken: refreshToken.toString() };
+	return { accessToken: token, refreshToken: refreshToken };
 };
 
 const User = mongoose.model("User", userSchema);
