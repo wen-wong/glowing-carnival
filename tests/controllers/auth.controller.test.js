@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { register, login, refreshToken } = require("../../src/controllers/auth.controller");
 let mongoServer;
+const validateUser = require("../../src/middlewares/validateUser");
 
 beforeAll(async () => {
 	mongoServer = new MongoMemoryServer();
@@ -31,6 +32,7 @@ describe("register", () => {
 	});
 
 	it("should create a new user and generate a token", async () => {
+		const validateUserSpy = jest.fn(validateUser);
 		const user = new User({
 			name: "John Doe",
 			email: "john@example.com",
@@ -38,14 +40,12 @@ describe("register", () => {
 		});
 		User.mockReturnValueOnce;
 		user.save = jest.fn();
-		jest.spyOn(user, "generateAuthToken").mockResolvedValue(Object);
-
+		jest.spyOn(user, "generateAuthToken").mockResolvedValue(String);
 		await register(req, res, next);
-
 		expect(res.status).toHaveBeenCalledWith(201);
 		expect(res.json).toHaveBeenCalledWith({
 			user: expect.any(Object),
-			token: expect.any(Object)
+			token: expect.any(String)
 		});
 	});
 
@@ -57,7 +57,6 @@ describe("register", () => {
 			password: "password123"
 		});
 		User.mockImplementationOnce;
-
 		jest.spyOn(user, "save").mockResolvedValue(Error);
 		await register(req, res, next);
 
@@ -143,14 +142,13 @@ describe("login function", () => {
 
 		jest.spyOn(User, "findOne").mockResolvedValue(f_user);
 		jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(Object);
-
+		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(String);
 		await login(req, res, next);
 		expect(User.findOne).toHaveBeenCalledWith({ email: "amen@bob.com" });
 		expect(bcrypt.compare).toHaveBeenCalledWith("123", f_user.password);
 		expect(f_user.generateAuthToken).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ token: expect.any(Object) });
+		expect(res.json).toHaveBeenCalledWith({ token: expect.any(String) });
 		expect(next).not.toHaveBeenCalled();
 	});
 
