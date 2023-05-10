@@ -1,3 +1,13 @@
+const logger = require("pino")({
+	transport: {
+		target: "pino-pretty",
+		option: {
+			colorize: true
+		}
+	}
+});
 function next(error) {
-	console.log("lmao you have an error");
+	logger.error(error);
 }
+
+module.exports = next;

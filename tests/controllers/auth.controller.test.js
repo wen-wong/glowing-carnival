@@ -158,8 +158,6 @@ describe("login function", () => {
 				refreshToken: expect.any(String)
 			})
 		});
-
-		// expect(res.json.token).toMatc;
 		expect(next).not.toHaveBeenCalled();
 	});
 
