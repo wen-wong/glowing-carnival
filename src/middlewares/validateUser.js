@@ -27,12 +27,10 @@ const user_ajv_schema = {
 };
 
 const validateUser = (user) => {
-	console.log(typeof user);
 	const validate = ajv.compile(user_ajv_schema);
 	const valid = validate(user);
 	if (!valid) {
-		console.log(validate.errors[0].message);
-		return { message: validate.errors[0].message };
+		return { message: validate.errors.message };
 	}
 	return { message: "Valid" };
 };

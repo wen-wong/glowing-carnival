@@ -20,7 +20,7 @@ const register = async (req, res, next) => {
 		const { name, email, password } = req.body;
 		const user = new User({ name, email, password });
 
-		const validate = validateUser(validation_dummy);
+		const validate = validateUser(user.toObject());
 		if (validate.message !== "Valid") {
 			res.status(401).json({ message: validate.message });
 			return;
@@ -41,26 +41,23 @@ const login = async (req, res, next) => {
 
 		const validation_dummy = new User({ email, password });
 
-		const validate = validateUser(validation_dummy);
-		console.log(validate.message);
+		const validate = validateUser(validation_dummy.toObject());
 		if (validate.message !== "Valid") {
 			res.status(401).json({ message: validate.message });
 			return;
 		}
-
 		const user = await User.findOne({ email });
 		if (!user) {
 			res.status(401).json({ message: "Invalid email or password" });
 			return;
 		}
-
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			res.status(401).json({ message: "Invalid email or password" });
 			return;
 		}
 
-		const token = user.generateAuthToken();
+		const token = await user.generateAuthToken();
 		res.status(200).json({ token });
 	} catch (error) {
 		next(error);
@@ -93,7 +90,6 @@ const refreshToken = async (req, res) => {
 		res.send({ accessToken: updatedAccessToken, refreshToken: updatedRefreshToken });
 	} catch (error) {
 		logger.error(error);
-		//console.log("token error");
 		res.status(500).send({ message: "Internal server error" });
 	}
 };

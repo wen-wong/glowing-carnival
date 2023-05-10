@@ -32,7 +32,6 @@ describe("register", () => {
 	});
 
 	it("should create a new user and generate a token", async () => {
-		const validateUserSpy = jest.fn(validateUser);
 		const user = new User({
 			name: "John Doe",
 			email: "john@example.com",
@@ -45,7 +44,7 @@ describe("register", () => {
 		expect(res.status).toHaveBeenCalledWith(201);
 		expect(res.json).toHaveBeenCalledWith({
 			user: expect.any(Object),
-			token: expect.any(String)
+			token: expect.any(Object)
 		});
 	});
 
@@ -142,13 +141,25 @@ describe("login function", () => {
 
 		jest.spyOn(User, "findOne").mockResolvedValue(f_user);
 		jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(String);
+		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(
+			Object({
+				accessToken: "1234",
+				refreshToken: "1232"
+			})
+		);
 		await login(req, res, next);
 		expect(User.findOne).toHaveBeenCalledWith({ email: "amen@bob.com" });
 		expect(bcrypt.compare).toHaveBeenCalledWith("123", f_user.password);
 		expect(f_user.generateAuthToken).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ token: expect.any(String) });
+		expect(res.json).toHaveBeenCalledWith({
+			token: expect.objectContaining({
+				accessToken: expect.any(String),
+				refreshToken: expect.any(String)
+			})
+		});
+
+		// expect(res.json.token).toMatc;
 		expect(next).not.toHaveBeenCalled();
 	});
 
