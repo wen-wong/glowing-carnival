@@ -17,7 +17,8 @@ const user_ajv_schema = {
 		password: { type: "string" },
 		name: { type: "string" },
 		phone: {
-			type: "string"
+			type: "string",
+			pattern: "^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$"
 		},
 		role: { enum: ["user", "moderator", "admin"] },
 		refreshTokens: { type: "array", items: { type: "string" } }
