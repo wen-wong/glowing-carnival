@@ -2,22 +2,22 @@ const User = require("../../src/models/user.model");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const bcrypt = require("bcryptjs");
-const { register, login, refreshToken } = require("../../src/controllers/auth.controller");
 const jwt = require("jsonwebtoken");
+const { register, login, refreshToken } = require("../../src/controllers/auth.controller");
+const validateUser = require("../../src/middlewares/validateUser");
 
 let mongoServer;
 
-
 beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    await mongoServer.start();
-    const mongoUri = mongoServer.getUri();
-    await mongoose.connect(mongoUri);
+	mongoServer = new MongoMemoryServer();
+	await mongoServer.start();
+	const mongoUri = mongoServer.getUri();
+	await mongoose.connect(mongoUri);
 });
 
 afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+	await mongoose.disconnect();
+	await mongoServer.stop();
 });
 
 describe('register', () => {
@@ -49,7 +49,7 @@ describe('register', () => {
         const error = new Error('bruh');
         const user = new User({ name: 'John Doe', email: 'john@example.com', password: 'Password@123'});
         User.mockImplementationOnce;
-
+      
         jest.spyOn(user, "save").mockResolvedValue(Error);
         await register(req, res, next);
 
@@ -57,7 +57,6 @@ describe('register', () => {
         expect(res.json).not.toHaveBeenCalled();
 
     });
-});
 
 
 describe('refreshToken endpoint', () => {
@@ -111,7 +110,6 @@ describe('refreshToken endpoint', () => {
     });
 });
 
-
 describe("login function", () => {
 	let req, res, next;
 
@@ -130,14 +128,23 @@ describe("login function", () => {
 
 		jest.spyOn(User, "findOne").mockResolvedValue(f_user);
 		jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(Object);
-
+		jest.spyOn(f_user, "generateAuthToken").mockResolvedValue(
+			Object({
+				accessToken: "1234",
+				refreshToken: "1232"
+			})
+		);
 		await login(req, res, next);
 		expect(User.findOne).toHaveBeenCalledWith({ email: "amen@bob.com" });
 		expect(bcrypt.compare).toHaveBeenCalledWith("Password@123", f_user.password);
 		expect(f_user.generateAuthToken).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ token: expect.any(Object) });
+		expect(res.json).toHaveBeenCalledWith({
+			token: expect.objectContaining({
+				accessToken: expect.any(String),
+				refreshToken: expect.any(String)
+			})
+		});
 		expect(next).not.toHaveBeenCalled();
 	});
 
