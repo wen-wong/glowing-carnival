@@ -8,12 +8,27 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true,
-		lowercase: true
+		lowercase: true,
+		match: /.+\@.+\..+/
 	},
-	password: { type: String, required: true },
+	password: {
+		type: String,
+		required: true,
+		validate: {
+			validator: function(v) {
+				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/.test(v);
+			},
+			message: props => `Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character!`
+		}},
 	name: { type: String },
 	phone: {
 		type: String,
+		validate: {
+			validator: function(v) {
+				return /\d{3}-\d{3}-\d{4}/.test(v);
+			},
+			message: props => `${props.value} is not a valid phone number!`
+		},
 		unique: true
 	},
 	role: { type: String, enum: ["user", "moderator", "admin"], default: "user" },
